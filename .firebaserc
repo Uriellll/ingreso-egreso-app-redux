@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "ingreso-egreso-app-fd2bc": {
+      "hosting": {
+        "ingresoEgreso": [
+          "ingreso-egreso-app-fd2bc"
+        ]
+      }
+    }
+  }
+}
