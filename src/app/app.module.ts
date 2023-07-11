@@ -1,3 +1,4 @@
+import { appReducers } from './app.reducer';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -19,6 +20,8 @@ import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule} from '@angular/fire/auth';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 
 
@@ -41,8 +44,12 @@ import { AngularFireAuthModule} from '@angular/fire/auth';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireAuthModule
-
+    AngularFireAuthModule,
+    StoreModule.forRoot(appReducers),
+    StoreDevtoolsModule.instrument({
+      maxAge:25,
+      logOnly:environment.production
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
