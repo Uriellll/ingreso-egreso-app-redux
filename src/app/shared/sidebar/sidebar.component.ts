@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { filter } from 'rxjs/operators';
+import { AppState } from 'src/app/app.reducer';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -8,10 +11,14 @@ import { AuthService } from 'src/app/services/auth.service';
   styles: []
 })
 export class SidebarComponent implements OnInit {
-
-  constructor(private authService: AuthService, private router:Router) { }
+  nombre:string = "";
+  constructor(private authService: AuthService, private router:Router, private store:Store<AppState>) { }
 
   ngOnInit() {
+    this.store.select('user')
+      .pipe(filter( ({user})=> user != null))
+      .subscribe( ({ user }) => this.nombre = user.nombre);
+
   }
   logOut(){
     this.authService.logOut().then(()=>{

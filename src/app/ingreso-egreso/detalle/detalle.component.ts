@@ -1,15 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { IngresoEgreso } from './../../models/ingreso-egreso.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { AppState } from 'src/app/app.reducer';
+import { IngresoEgresoService } from 'src/app/services/ingreso-egreso.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detalle',
   templateUrl: './detalle.component.html',
   styles: []
 })
-export class DetalleComponent implements OnInit {
-
-  constructor() { }
+export class DetalleComponent implements OnInit, OnDestroy {
+  ingresosEgresos: IngresoEgreso[] = [];
+  ingresosSubs: Subscription;
+  constructor(private store:Store<AppState>, private ieService: IngresoEgresoService) { }
 
   ngOnInit() {
+    this.ingresosSubs=this.store.select('ingresoEgreso')
+      .subscribe(({items})=>this.ingresosEgresos = items);
+  }
+  ngOnDestroy(): void {
+    this.ingresosSubs.unsubscribe();
+  }
+  borrar(uid:any){
+    this.ieService.borrarIngresoEgreso(uid)
+      .then(()=> Swal.fire('Borrado','Item borrado', 'success'))
+      .catch(err=> Swal.fire('Error', err.message, 'error'))
   }
 
 }
