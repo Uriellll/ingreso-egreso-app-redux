@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { IngresoEgresoService } from '../services/ingreso-egreso.service';
 import * as ingresosEgresosActions from '../ingreso-egreso/ingreso-egreso.actions';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,7 @@ import * as ingresosEgresosActions from '../ingreso-egreso/ingreso-egreso.action
 export class DashboardComponent implements OnInit, OnDestroy {
   userSubs: Subscription;
   ingresosEgresosSubs:Subscription;
-  constructor(private store: Store<AppState>, private ingresoEgreso:IngresoEgresoService) { }
+  constructor(private store: Store<AppState>, private ingresoEgreso:IngresoEgresoService, private auth:AuthService) { }
 
   ngOnInit() {
     this.userSubs= this.store.select('user').pipe(
@@ -25,10 +26,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.store.dispatch(ingresosEgresosActions.setItems({items:ingresosEgresosFB}))
       })
     })
+    this.auth.isAuth().subscribe(res=>{
+      console.log(res);
+    })
   }
   ngOnDestroy(): void {
-    this.ingresosEgresosSubs.unsubscribe();
-    this.userSubs.unsubscribe();
+    this.ingresosEgresosSubs?.unsubscribe();
+    this.userSubs?.unsubscribe();
   }
 
 }

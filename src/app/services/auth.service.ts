@@ -7,7 +7,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { Store } from "@ngrx/store";
 import { AppState } from "../app.reducer";
 import * as authActions from "../auth/auth.actions";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import * as ingresosEgresosActions from "../ingreso-egreso/ingreso-egreso.actions";
 
 @Injectable({
@@ -62,7 +62,7 @@ export class AuthService {
   logOut(){
     return this.auth.signOut();
   }
-  isAuth(){
-    return this.auth.authState.pipe(map(fbUser=> fbUser!= null));
+  isAuth(): Observable<boolean>{
+    return this.auth.authState.pipe(map(fbUser=> !!fbUser));
   }
 }
